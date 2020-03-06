@@ -35,7 +35,7 @@ ENV M2 ${M2_HOME}/bin
 ENV PATH ${M2}:${PATH}
 
 # Install Java and conversion tools
-ARG JDK_VERSION=11
+ARG JDK_VERSION
 RUN yum -y --enablerepo nuxeo update && yum -y install epel-release && yum -y --setopt=skip_missing_names_on_install=False --enablerepo nuxeo install \
   ccextractor-0.88-2.el7 \
   ffmpeg-4.1.4-5.el7 \
@@ -55,8 +55,9 @@ RUN alternatives --set java java-${JDK_VERSION}-openjdk.x86_64
 
 # Install Node.jx
 ARG NODEJS_VERSION
-RUN yum install -y nodejs gcc-c++ make
-RUN curl -f --silent --location https://rpm.nodesource.com/setup_$NODEJS_VERSION.x | bash -
+RUN curl -f --silent --location https://rpm.nodesource.com/setup_$NODEJS_VERSION.x | bash - && \
+    yum install -y nodejs && \
+    yum install -y gcc-c++ make
 
 # Install Chrome
 RUN yum install -y google-chrome-stable \

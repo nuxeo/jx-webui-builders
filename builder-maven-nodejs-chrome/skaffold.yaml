@@ -25,6 +25,7 @@ build:
         buildArgs:
           JDK_VERSION: "11"
           MAVEN_VERSION: 3.6.1
+          NODEJS_VERSION: "10"
         cache:
   cluster:
     namespace: webui
