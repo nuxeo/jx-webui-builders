@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-FROM gcr.io/jenkinsxio/builder-base:0.0.80
+FROM gcr.io/jenkinsxio/builder-jx:2.0.1117-453
 
 ARG DESCRIPTION="Maven+NodeJS and Chrome image for the Nuxeo WebUI build"
 ARG SCM_REPOSITORY=git@github.com:nuxeo/jx-webui-builders.git
