@@ -40,7 +40,7 @@ RUN yum -y --enablerepo nuxeo update && yum -y install epel-release && yum -y --
   ccextractor-0.88-2.el7 \
   ffmpeg-4.1.4-5.el7 \
   ghostscript \
-  ImageMagick-6.7.8.9-18.el7 \
+  ImageMagick-6.9.10.68-3.el7 \
   java-$JDK_VERSION-openjdk java-$JDK_VERSION-openjdk-devel \
   libreoffice-calc libreoffice-headless libreoffice-impress libreoffice-writer \
   libwpd-tools \
