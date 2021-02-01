@@ -1,5 +1,9 @@
 [nuxeo]
-name=Nuxeo Jenkins X Repository
-baseurl=https://nexus.platform.dev.nuxeo.com/repository/yum-registry/
-enabled=0
+name=Nexus Private Yum Release Repository
+baseurl=https://packages.nuxeo.com/repository/yum-registry/
+username=$YUM_REPO_USERNAME
+password=$YUM_REPO_PASSWORD
+enabled=1
+protect=0
 gpgcheck=0
+metadata_expire=30s
