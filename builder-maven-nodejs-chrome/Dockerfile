@@ -23,7 +23,7 @@ LABEL scm-url=${SCM_REPOSITORY}
 LABEL version=${VERSION}
 LABEL scm-ref=${SCM_REF}
 
-# Add Nuxeo Jenkins X Yum repository
+# Add Nexus Private Yum Release Repository
 COPY nuxeo.repo /etc/yum.repos.d/
 
 # Install Maven
@@ -36,9 +36,9 @@ ENV PATH ${M2}:${PATH}
 
 # Install Java and conversion tools
 ARG JDK_VERSION
-RUN yum -y --enablerepo nuxeo update && yum -y install epel-release && yum -y --setopt=skip_missing_names_on_install=False --enablerepo nuxeo install \
-  ccextractor-0.88-2.el7 \
-  ffmpeg-4.1.4-5.el7 \
+RUN yum -y update && yum -y install epel-release && yum -y --setopt=skip_missing_names_on_install=False install \
+  ccextractor \
+  ffmpeg-nuxeo \
   ghostscript \
   ImageMagick-6.9.10.68-3.el7 \
   java-$JDK_VERSION-openjdk java-$JDK_VERSION-openjdk-devel \
@@ -61,6 +61,7 @@ RUN curl -f --silent --location https://rpm.nodesource.com/setup_$NODEJS_VERSION
 
 # Install Chrome
 RUN yum install -y google-chrome-stable \
-  && yum clean all
+  && yum clean all \
+  && rm /etc/yum.repos.d/nuxeo.repo
 
 CMD ["google-chrome","-version"]

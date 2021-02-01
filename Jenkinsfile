@@ -34,7 +34,21 @@ void setGitHubBuildStatus(String context, String message, String state) {
 }
 
 void getReleaseVersion() {
+  // git credentials required to invoke `jx-release-version` on a private repository
+  sh """
+    jx step git credentials
+    git config credential.helper store
+  """
   return sh(returnStdout: true, script: 'jx-release-version')
+}
+
+void setYumRepoCredentials() {
+  dir('builder-java') {
+    sh """
+      envsubst < nuxeo.repo > nuxeo.repo~gen
+      mv nuxeo.repo~gen nuxeo.repo
+    """
+  }
 }
 
 /**
@@ -72,7 +86,10 @@ pipeline {
         setGitHubBuildStatus('build', 'Build and push builder images', 'PENDING')
         container('jx-base') {
           withEnv(["VERSION=${getReleaseVersion()}-${BRANCH_NAME}"]) {
-            skaffoldBuildRepository()
+            withCredentials([usernamePassword(credentialsId: 'packages.nuxeo.com-auth', usernameVariable: 'YUM_REPO_USERNAME', passwordVariable: 'YUM_REPO_PASSWORD')]) {
+              setYumRepoCredentials()
+              skaffoldBuildRepository()
+            }
           }
         }
       }
@@ -93,7 +110,10 @@ pipeline {
         setGitHubBuildStatus('release', 'Build and push release builder images', 'PENDING')
         container('jx-base') {
           withEnv(["VERSION=latest"]) {
-            skaffoldBuildRepository()
+            withCredentials([usernamePassword(credentialsId: 'packages.nuxeo.com-auth', usernameVariable: 'YUM_REPO_USERNAME', passwordVariable: 'YUM_REPO_PASSWORD')]) {
+              setYumRepoCredentials()
+              skaffoldBuildRepository()
+            }
           }
         }
       }
@@ -123,10 +143,6 @@ pipeline {
               echo "Releasing version ${VERSION}"
               sh """
                 #!/usr/bin/env bash -xe
-
-                # create the Git credentials
-                jx step git credentials
-                git config credential.helper store
 
                 # Git tag
                 jx step tag -v ${VERSION}
