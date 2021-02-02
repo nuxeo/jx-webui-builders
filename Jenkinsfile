@@ -43,7 +43,7 @@ void getReleaseVersion() {
 }
 
 void setYumRepoCredentials() {
-  dir('builder-java') {
+  dir('builder-maven-nodejs-chrome') {
     sh """
       envsubst < nuxeo.repo > nuxeo.repo~gen
       mv nuxeo.repo~gen nuxeo.repo
