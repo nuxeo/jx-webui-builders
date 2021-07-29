@@ -77,6 +77,9 @@ pipeline {
   environment {
     ORG = 'nuxeo'
   }
+  triggers {
+    cron('H 6 * * 1')
+  }
   stages {
     stage('Build and push builder images') {
       when {
